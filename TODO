@@ -1,0 +1,12 @@
+TODO
+====
+
+1] prompt for user option when git clone user often-used repoes("feinote");
+2] Lots of errors encounted when lauched in Ubuntu 12.10 platform;
+3] vimrc template encounted error because installing packages error(pathogen)
+
+4] 使用git为整个系统的配置做版本控制，使用正则表达式来编写整个系统的全局gitignore
+5] 每个用户的家目录配置文件默认都是以.开头的隐藏文件
+6] git init的根目录在/根目录
+7] 每个系统用户一个分支(如何写gitignore，每个用户只管理自己的配置文件)
+

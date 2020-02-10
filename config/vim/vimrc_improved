@@ -1,0 +1,351 @@
+" General {{{
+set nocompatible        " Disable vi compatibility
+set hidden              " Open a new file using :e,
+                        " without being forced to write or undo your changes first
+set encoding=utf-8
+set history=1000         " Number of things to remember in history
+set timeoutlen=250      " Time to wait after ESC (default causes an annoying delay)
+set clipboard=unnamed   " Yanks go on clipboard instead
+if $TMUX == ''
+  set clipboard+=unnamed
+endif
+set t_Co=256
+set lazyredraw          " Don't redraw while executing macros (good performance config)
+" Match & search
+"set hlsearch            " Highlight search
+set ignorecase          " Do case in sensitive matching with
+set smartcase           " be sensitive when there's a capital letter
+set incsearch           " Do incremental searching
+" Backup & undo
+set nowritebackup
+set nobackup
+set directory=/tmp//    " prepend(^=) $HOME/.tmp/ to default path; use full path as backup filename(//)
+
+set undofile
+set undodir=~/.vim/undo
+
+autocmd! bufwritepost .vimrc source %
+""}}}
+
+" Vundle {{{ -----------------------------------------------------------------
+filetype off
+filetype plugin indent off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Plugin 'gmarik/vundle'
+"""""""""""""""""""""""""""""easymotion
+Plugin 'Lokaltog/vim-easymotion'
+let g:EasyMotion_leader_key = 'f'
+
+"""""""""""""""""""""""""""""airline
+Plugin 'bling/vim-airline'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.branch = '⎇'
+
+"""""""""""""""""""""""""""""NERDTree
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+map <S-m> <plug>NERDTreeTabsToggle<CR>
+
+"""""""""""""""""""""""""""""solarized
+Plugin 'altercation/vim-colors-solarized'
+
+
+"""""""""""""""""""""""""""""neocomplete
+Plugin 'Shougo/neocomplete.vim'
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType make setlocal noexpandtab
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+"""""""""""""""""""""""""""""
+Plugin 'Shougo/neosnippet.vim'
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
+"""""""""""""""""""""""""""""
+Plugin 'groenewege/vim-less'
+
+"""""""""""""""""""""""""""""
+Plugin 'scrooloose/syntastic'
+let g:syntastic_check_on_open=1
+let g:syntastic_phpcs_conf = "--tab-width=4 --standard=CodeIgniter"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""vim-markdown
+Plugin 'tpope/vim-markdown'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""bufexplorer
+Plugin 'vim-scripts/bufexplorer.zip'
+noremap <silent> <CR> :BufExplorerVerticalSplit<CR>
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
+let g:bufExplorerSplitRight=1        " Split right.
+let g:bufExplorerSplitVertical=1     " Split vertically.
+let g:bufExplorerSplitVertSize = 50  " Split width
+" let g:bufExplorerUseCurrentWindow=0  " Open in new window.
+autocmd BufWinEnter \[Buf\ List\] setl nonumber 
+
+"""""""""""""""""""""""""""""
+Plugin 'digitaltoad/vim-jade'
+Plugin 'mileszs/ack.vim'
+Plugin 'vim-scripts/nerdtree-ack'
+
+" ISSUE: https://github.com/joedicastro/dotfiles/issues/12
+" Plugin 'terryma/vim-multiple-cursors'
+Plugin 'joedicastro/vim-multiple-cursors'
+Plugin 'Raimondi/delimitMate'
+
+" Dash
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'rizzatti/dash.vim'
+:nmap <silent> Q <Plug>DashSearch
+
+Plugin 'pangloss/vim-javascript'
+Plugin 'tpope/vim-commentary'
+nmap <BS> gcc
+vmap <BS> gc
+
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'terryma/vim-expand-region'
+map <Space> <Plug>(expand_region_expand)
+map - <Plug>(expand_region_shrink)
+noremap + =
+
+Plugin 'thiderman/nginx-vim-syntax'
+Plugin 'mattn/emmet-vim'
+Plugin 'jnwhiteh/vim-golang'
+Plugin 'gkz/vim-ls'
+set runtimepath+=$GOROOT/misc/vim
+
+Plugin 'mustache/vim-mode'
+Plugin 'kchmck/vim-coffee-script'
+autocmd FileType litcoffee runtime ftplugin/coffee.vim
+
+Plugin 'mintplant/vim-literate-coffeescript'
+Plugin 'kien/ctrlp.vim'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
+Plugin 'tpope/vim-fugitive'
+Plugin 'junegunn/goyo.vim'
+
+" }}}
+
+" Formatting {{{ --------------------------------------------------------------
+set fo-=o         " Do not insert the current comment leader after hitting 'o' or 'O' in Normal mode.
+set fo-=r         " Do not automatically insert a comment leader after an enter
+set fo-=t         " Do not auto-wrap text using textwidth (does not apply to comments)
+
+" set nowrap
+set textwidth=0   " Don't wrap lines by default
+set wildmode=longest,list " At command line, complete longest common string, then list alternatives.
+
+set backspace=indent,eol,start
+
+set tabstop=2     " Set the default tabstop
+set softtabstop=2
+set shiftwidth=2  " Set the default shift width for indents
+set smarttab      " Smarter tab levels
+set expandtab
+
+" indent setting
+" set si
+set formatoptions+=mM
+set smartindent
+set cindent
+set cinoptions=:s,ps,ts,cs
+set cinwords=if,else,while,do,for,switch,case
+
+syntax on
+set synmaxcol=248
+
+set ttyfast " u got a fast terminal
+set ttyscroll=3
+set lazyredraw " to avoid scrolling problems
+
+set foldmethod=indent
+set foldlevel=2
+set foldlevelstart=20 " All folds open when opening a file
+
+filetype plugin indent on " Automatically detect file types
+" }}}
+
+" Visual {{{ -----------------------------------------------------------------
+set ruler         " Show the cursor position all the time
+set showcmd       " Display incomplete commands
+" set cursorcolumn  " Highlight the current column
+set cursorline    " Highlight the current line
+
+" Have a different background in GUI and terminal modes.
+if has('gui_running')
+    set cursorcolumn  " Highlight the current column
+    set background=dark
+    :silent! colorscheme solarized
+else
+    " set background=light
+endif
+
+" :silent! colorscheme solarized
+
+" Highlight trailing whitespace
+:highlight TrailWhitespace ctermbg=red guibg=red
+:match TrailWhitespace /\s\+$\| \+\ze\t/
+
+" set nowrap
+set whichwrap=b,s,<,>,[,],h,l
+
+" list setting
+set list
+" set listchars=tab:▸-,trail:⋅,extends:❯,precedes:❮
+" relative number
+"set relativenumber
+" make relative number set for all buffer
+"au BufReadPost * set relativenumber
+set nu
+" }}}
+
+" Key mappings {{{ -----------------------------------------------------------
+noremap H ^
+noremap L $
+nnoremap ; :
+nnoremap : ;
+:ca w; w
+" emacs style key binding for insert mode
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+inoremap <C-b> <C-o>b
+inoremap <C-w> <C-o>w
+inoremap <C-u> <Esc><Right>c0
+
+" fei config
+inoremap jj <Esc>
+vnoremap ff <Esc>
+
+"xnoremap p pgvy
+noremap vp viwpgvy
+noremap vy yiw
+nnoremap K "_d
+" nnoremap ~ /=expand("<cword>")
+nnoremap ~ ma*
+
+" use left & right key to switch between buffers
+noremap <silent> <Left> :bp<CR>
+noremap <silent> <Right> :bn<CR>
+" noremap <S-h> :bp<CR>
+noremap <S-l> :bn<CR>
+
+" map up & down to gk & gj for convenient in wrap model
+noremap <Up> gk
+noremap <Down> gj
+" write with sudo
+cmap w!! w !sudo tee %
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+" reselect visual block after indent/outdent
+vnoremap , <gv
+vnoremap . >gv
+
+" make Y behave like other capitals
+noremap Y y$
+
+" Quickly insert parenthesis/brackets/etc.
+" inoremap (( <Esc>I(<Esc>A)<Esc>I
+
+"" map ctrl + s to save file. need add 'stty -ixon' in the .bashrc or .zshrc
+"" if you use vim in the terminal.
+" inoremap <C-s> <Esc>:w<CR>a
+" nnoremap <C-s> :w<CR>
+
+nnoremap <Tab> %
+"nnoremap \ :!open <C-R>%<CR><CR>
+nnoremap U <C-r>
+
+" Window Navigation
+noremap <C-J> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+noremap <C-W>l <C-l>
+" }}}
+
+" Omnifunc {{{ ---------------------------------------------------------------
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType c set omnifunc=ccomplete#Complete
+" }}}
+
+" MacVim {{{ -----------------------------------------------------------------
+if has("gui_running")
+    set go=aAce  " remove toolbar
+    "set transparency=30
+    set guifont=Monaco:h13
+    set showtabline=2
+    set columns=140
+    set lines=40
+    noremap <D-M-Left> :tabprevious<cr>
+    noremap <D-M-Right> :tabnext<cr>
+    map <D-1> 1gt
+    map <D-2> 2gt
+    map <D-3> 3gt
+    map <D-4> 4gt
+    map <D-5> 5gt
+    map <D-6> 6gt
+    map <D-7> 7gt
+    map <D-8> 8gt
+    map <D-9> 9gt
+    map <D-0> :tablast<CR>
+endif
+" }}}
+
+autocmd BufReadPre * if getfsize(expand("%")) > 10000000 | syntax off | endif
+
