@@ -30,6 +30,8 @@ for script in $HOME/scripts/*;do
 done
 unset script
 
+export LC_ALL=zh_CN.utf8 
+
 cat << EOF
 
 ██╗     ██╗   ██╗███╗   ██╗███████╗██╗  ██╗ ██████╗ ██╗   ██╗███████╗███████╗██╗
