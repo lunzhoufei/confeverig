@@ -20,6 +20,9 @@ export PATH=$PATH:~/env/bin
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:$HOME/env/include
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$HOME/env/include
 
+export GO111MODULE=on
+export GOPROXY=https://goproxy.cn
+
 
 ################## load all alias ########################
 for script in $HOME/scripts/*;do
