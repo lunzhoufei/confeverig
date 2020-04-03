@@ -28,10 +28,15 @@ export GOPROXY=https://goproxy.cn
 for script in $HOME/scripts/*;do
     if [[ -f $script ]];then
         source $script
-        echo "source $HOME/scripts/$script"
+        echo "source $script"
     fi
 done
 unset script
+
+#################### git related  ########################
+git config --global user.name "lunzhoufei"
+git config --global user.email "lunzhoufei@gmail.com"
+git config --global core.editor "vim"
 
 export LC_ALL=zh_CN.utf8 
 
