@@ -4,6 +4,7 @@
 ################## load oh-my-zsh tpl ####################
 source ~/.zshrc.from.ohmyzsh
 
+
 ################## load confeverig cnf ###################
 for config in ~/.confeverig/*
 do
@@ -13,15 +14,13 @@ do
 done
 unset config
 
+
 ################## export my env ########################
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/env/lib
 export LIBRARY_PATH=$LIBRARY_PATH:$HOME/env/lib
 export PATH=$PATH:~/env/bin
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:$HOME/env/include
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$HOME/env/include
-
-export GO111MODULE=on
-export GOPROXY=https://goproxy.cn
 
 
 ################## load all alias ########################
@@ -42,7 +41,21 @@ git config --global merge.conflictstyle diff3
 git config --global merge.tool vimdiff
 git config --global mergetool.prompt true
 
+
+#################### golang related  #####################
+export GO111MODULE=on
+export GOROOT=$HOME/goroot/go
+export GOPATH=$HOME~/gopath
+export GOBIN=$HOME/gopath/bin
+export PATH=$PATH:$GOPATH/bin:$GOBIN:$GOROOT/bin
+export GOSUMDB="off"
+export GOPROXY=https://goproxy.io,direct
+# export GOPROXY=https://goproxy.cn
+
+
+####################      Others     #####################
 export LC_ALL=zh_CN.utf8 
+
 
 cat << EOF
 
