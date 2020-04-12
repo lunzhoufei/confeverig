@@ -37,6 +37,10 @@ unset script
 git config --global user.name "lunzhoufei"
 git config --global user.email "lunzhoufei@gmail.com"
 git config --global core.editor "vim"
+git config --global core.editor "vim"
+git config --global merge.conflictstyle diff3
+git config --global merge.tool vimdiff
+git config --global mergetool.prompt true
 
 export LC_ALL=zh_CN.utf8 
 
