@@ -45,7 +45,7 @@ git config --global mergetool.prompt true
 #################### golang related  #####################
 export GO111MODULE=on
 export GOROOT=$HOME/goroot/go
-export GOPATH=$HOME~/gopath
+export GOPATH=$HOME/gopath
 export GOBIN=$HOME/gopath/bin
 export PATH=$PATH:$GOPATH/bin:$GOBIN:$GOROOT/bin
 export GOSUMDB="off"
