@@ -1,0 +1,559 @@
+"##############################################################################"
+"                           Lunzhoufei's VIM configure                         "
+"##############################################################################"
+
+set nocompatible        " Disable vi compatibility
+set hidden              " Open a new file using :e,
+                        " without being forced to write or undo your changes first
+set history=1000         " Number of things to remember in history
+set timeoutlen=250      " Time to wait after ESC (default causes an annoying delay)
+set clipboard=unnamed   " Yanks go on clipboard instead
+if $TMUX == ''
+  set clipboard+=unnamed
+endif
+set t_Co=256
+set lazyredraw          " Don't redraw while executing macros (good performance config)
+" Match & search
+"set hlsearch            " Highlight search
+set ignorecase          " Do case in sensitive matching with
+set smartcase           " be sensitive when there's a capital letter
+set incsearch           " Do incremental searching
+" Backup & undo
+set nowritebackup
+set nobackup
+set directory=/tmp//    " prepend(^=) $HOME/.tmp/ to default path; use full path as backup filename(//)
+
+"set undofile
+"set undodir=~/.vim/undo
+
+set colorcolumn=80
+highlight colorcolumn ctermbg=8
+
+" ---------------------------------------------------------------------------- "
+"                                    Charset
+" ---------------------------------------------------------------------------- "
+" Chinese chararcters messy code troubleshooting
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencoding=utf-8
+set encoding=utf-8
+
+" ---------------------------------------------------------------------------- "
+"                                     Ctags
+" ---------------------------------------------------------------------------- "
+set tags=tags;
+set autochdir
+set hlsearch        "highlight search result"
+
+
+"##############################################################################"
+"                                     Plugins                                  "
+"##############################################################################"
+autocmd! bufwritepost .vimrc source %
+filetype off
+filetype plugin indent off
+set rtp+=~/.vim/bundle/vundle
+call vundle#begin()
+Plugin 'gmarik/vundle'
+
+" ---------------------------------------------------------------------------- "
+"                                    easymotion
+" ---------------------------------------------------------------------------- "
+Plugin 'Lokaltog/vim-easymotion'
+let g:EasyMotion_leader_key = 'f'
+
+
+" ---------------------------------------------------------------------------- "
+"                                    NerdTree
+" ---------------------------------------------------------------------------- "
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+map <S-m> <plug>NERDTreeTabsToggle<CR>
+
+
+" ---------------------------------------------------------------------------- "
+"                                      Theme  
+" ---------------------------------------------------------------------------- "
+Plugin 'altercation/vim-colors-solarized'
+" Plugin 'tomasr/molokai'
+
+Plugin 'scrooloose/syntastic'
+let g:syntastic_check_on_open=1
+let g:syntastic_phpcs_conf = "--tab-width=4 --standard=CodeIgniter"
+
+Plugin 'bling/vim-airline'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.branch = '⎇'
+
+
+" ---------------------------------------------------------------------------- "
+"                                   Auto complete  
+" ---------------------------------------------------------------------------- "
+" Plugin 'Shougo/neocomplete.vim'
+
+" ---------------------------------------------------------------------------- "
+"                                    Snippets
+" ---------------------------------------------------------------------------- "
+let g:go_version_warning = 0
+Plugin 'msanders/snipmate.vim'
+Plugin 'Shougo/neosnippet.vim'
+Plugin 'Shougo/neosnippet-snippets.vim'
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+
+Plugin 'groenewege/vim-less'
+
+
+" ---------------------------------------------------------------------------- "
+"                                     bufexplorer
+" ---------------------------------------------------------------------------- "
+Plugin 'vim-scripts/bufexplorer.zip'
+nnoremap  <CR> :BufExplorerVerticalSplit<CR>
+" map <S-l> :BufExplorerVerticalSplit<CR>
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
+let g:bufExplorerSplitRight=1        " Split right.
+let g:bufExplorerSplitVertical=1     " Split vertically.
+let g:bufExplorerSplitVertSize = 30  " Split width
+" let g:bufExplorerUseCurrentWindow=0  " Open in new window.
+autocmd BufWinEnter \[Buf\ List\] setl nonumber 
+
+
+" ---------------------------------------------------------------------------- "
+"                                      Markdown
+" ---------------------------------------------------------------------------- "
+Plugin 'tpope/vim-markdown'
+
+
+" ---------------------------------------------------------------------------- "
+"                                         C++     
+" ---------------------------------------------------------------------------- "
+Plugin 'octol/vim-cpp-enhanced-highlight'
+let c_no_curly_error=1
+let g:cpp_class_scope_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+Plugin 'derekwyatt/vim-fswitch'
+
+" ---------------------------------------------------------------------------- "
+"                                         Go     
+" ---------------------------------------------------------------------------- "
+Plugin 'fatih/vim-go'
+syntax enable
+" syntax on
+au BufRead,BufNewFile *.go set filetype=go
+au BufRead,BufNewFile *.golang set filetype=go
+au BufWritePre *.go :GoFmt
+let g:go_def_mapping_enabled = 1
+au filetype go nmap gd :GoDef<CR>
+au filetype go nmap <C-j> <Plug>(go-def)
+au filetype go nmap <C-k> <Plug>(go-def-split)
+au filetype go nmap <C-q> <Plug>(go-def-vertical)
+au filetype go nmap <C-s> <Plug>(go-def-stack)
+au filetype go nmap <C-u> <Plug>(go-def-pop)
+au filetype go nmap <C-i> <Plug>(go-implements)
+au filetype go nmap <C-.> <Plug>(go-callees)
+au filetype go nmap <C-,> <Plug>(go-callers)
+
+filetype plugin on
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
+" Plugin 'cespare/vim-golang'
+" Plugin 'dgryski/vim-godef'
+
+
+Plugin 'Blackrush/vim-gocode'
+" Plugin 'jnwhiteh/vim-golang'
+Plugin 'gkz/vim-ls'
+set runtimepath+=$GOROOT/misc/vim
+
+" ---------------------------------------------------------------------------- "
+"                                      Python
+" ---------------------------------------------------------------------------- "
+
+
+" ---------------------------------------------------------------------------- "
+"                                     JavaScript     
+" ---------------------------------------------------------------------------- "
+Plugin 'pangloss/vim-javascript'
+Plugin 'kchmck/vim-coffee-script'
+autocmd FileType litcoffee runtime ftplugin/coffee.vim
+Plugin 'mintplant/vim-literate-coffeescript'
+
+" ---------------------------------------------------------------------------- "
+"                                      DrawIt
+" ---------------------------------------------------------------------------- "
+Plugin 'vim-scripts/DrawIt'
+
+" ---------------------------------------------------------------------------- "
+"                                     signature
+" ---------------------------------------------------------------------------- "
+Plugin 'kshenoy/vim-signature'
+let g:SignatureMap = {
+        \ 'Leader'             :  "m",
+        \ 'PlaceNextMark'      :  "m,",
+        \ 'ToggleMarkAtLine'   :  "m.",
+        \ 'PurgeMarksAtLine'   :  "m-",
+        \ 'DeleteMark'         :  "dm",
+        \ 'PurgeMarks'         :  "mda",
+        \ 'PurgeMarkers'       :  "m<BS>",
+        \ 'GotoNextLineAlpha'  :  "']",
+        \ 'GotoPrevLineAlpha'  :  "'[",
+        \ 'GotoNextSpotAlpha'  :  "`]",
+        \ 'GotoPrevSpotAlpha'  :  "`[",
+        \ 'GotoNextLineByPos'  :  "]'",
+        \ 'GotoPrevLineByPos'  :  "['",
+        \ 'GotoNextSpotByPos'  :  "mn",
+        \ 'GotoPrevSpotByPos'  :  "mp",
+        \ 'GotoNextMarker'     :  "[+",
+        \ 'GotoPrevMarker'     :  "[-",
+        \ 'GotoNextMarkerAny'  :  "]=",
+        \ 'GotoPrevMarkerAny'  :  "[=",
+        \ 'ListLocalMarks'     :  "ms",
+        \ 'ListLocalMarkers'   :  "m?"
+        \ }
+
+
+" ---------------------------------------------------------------------------- "
+"                                       Tagbar     
+" ---------------------------------------------------------------------------- "
+Plugin 'majutsushi/tagbar'
+filetype on
+" 设置 tagbar 子窗口的位置出现在主编辑区的左边 
+let tagbar_left=0
+" " 设置显示／隐藏标签列表子窗口的快捷键。速记：tag list 
+nnoremap <silent> <S-w> :TagbarToggle<CR> 
+" " 设置标签子窗口的宽度 
+let tagbar_width=42
+" " tagbar 子窗口中不显示冗余帮助信息 
+let g:tagbar_compact=1
+" " 设置 ctags 对哪些代码元素生成标签
+let g:tagbar_type_cpp = {
+    \ 'kinds' : [
+        \ 'd:macros:1',
+        \ 'g:enums',
+        \ 't:typedefs:0:0',
+        \ 'e:enumerators:0:0',
+        \ 'n:namespaces',
+        \ 'c:classes',
+        \ 's:structs',
+        \ 'u:unions',
+        \ 'f:functions',
+        \ 'm:members:0:0',
+        \ 'v:global:0:0',
+        \ 'x:external:0:0'
+     \ ],
+     \ 'sro'        : '::',
+     \ 'kind2scope' : {
+         \ 'g' : 'enum',
+         \ 'n' : 'namespace',
+         \ 'c' : 'class',
+         \ 's' : 'struct',
+         \ 'u' : 'union'
+     \ },
+     \ 'scope2kind' : {
+         \ 'enum'      : 'g',
+         \ 'namespace' : 'n',
+         \ 'class'     : 'c',
+         \ 'struct'    : 's',
+         \ 'union'     : 'u'
+     \ }
+     \ }
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+    \ }
+
+
+" ---------------------------------------------------------------------------- "
+"                                   Miscellaneous
+" ---------------------------------------------------------------------------- "
+Plugin 'digitaltoad/vim-jade'
+Plugin 'mileszs/ack.vim'
+Plugin 'vim-scripts/nerdtree-ack'
+
+" ISSUE: https://github.com/joedicastro/dotfiles/issues/12
+" Plugin 'terryma/vim-multiple-cursors'
+Plugin 'joedicastro/vim-multiple-cursors'
+Plugin 'Raimondi/delimitMate'
+
+" Dash
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'rizzatti/dash.vim'
+:nmap <silent> Q <Plug>DashSearch
+
+Plugin 'tpope/vim-commentary'
+nmap <BS> gcc
+vmap <BS> gc
+
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'terryma/vim-expand-region'
+map <Space> <Plug>(expand_region_expand)
+map - <Plug>(expand_region_shrink)
+noremap + =
+
+Plugin 'thiderman/nginx-vim-syntax'
+Plugin 'mattn/emmet-vim'
+
+Plugin 'mustache/vim-mode'
+Plugin 'kien/ctrlp.vim'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
+Plugin 'tpope/vim-fugitive'
+Plugin 'junegunn/goyo.vim'
+
+
+"##############################################################################"
+"                                     Formats                                  "
+"##############################################################################"
+set fo-=o         " Do not insert the current comment leader after hitting 'o' or 'O' in Normal mode.
+set fo-=r         " Do not automatically insert a comment leader after an enter
+set fo-=t         " Do not auto-wrap text using textwidth (does not apply to comments)
+" set nowrap
+" set textwidth=0   " Don't wrap lines by default
+" set wildmode=longest,list " At command line, complete longest common string, then list alternatives.
+set backspace=indent,eol,start
+set tabstop=4     " Set the default tabstop
+set softtabstop=4
+set shiftwidth=4  " Set the default shift width for indents
+set smarttab      " Smarter tab levels
+set expandtab
+" indent setting
+" set si
+set formatoptions+=mM
+set smartindent
+set cindent
+set cinoptions=:s,ps,ts,cs
+set cinwords=if,else,while,do,for,switch,case
+syntax on
+set synmaxcol=248
+set ttyfast " u got a fast terminal
+set ttyscroll=3
+set lazyredraw " to avoid scrolling problems
+"set foldmethod=indent
+set foldmethod=manual
+set foldlevel=2
+set foldlevelstart=20 " All folds open when opening a file
+filetype plugin indent on " Automatically detect file types
+" }}}
+
+
+"##############################################################################"
+"                                     Visual
+"##############################################################################"
+set ruler         " Show the cursor position all the time
+set showcmd       " Display incomplete commands
+" set cursorcolumn  " Highlight the current column
+set cursorline    " Highlight the current line
+
+" Have a different background in GUI and terminal modes.
+if has('gui_running')
+    " set cursorcolumn  " Highlight the current column
+    set background=dark
+    :silent! colorscheme solarized
+else
+    " set background=light
+endif
+
+" :silent! colorscheme solarized
+" Highlight trailing whitespace
+" :highlight TrailWhitespace ctermbg=red guibg=red
+" :match TrailWhitespace /\s\+$\| \+\ze\t/
+" set nowrap
+set whichwrap=b,s,<,>,[,],h,l
+
+" list setting
+" ##show invisible characters
+" set list
+" set listchars=tab:▸-,trail:⋅,extends:❯,precedes:❮
+" set listchars=tab:⋅-,trail:⋅
+"
+" relative number
+"set relativenumber
+" make relative number set for all buffer
+"au BufReadPost * set relativenumber
+set nu
+" }}}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Key mapping                                  "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+noremap H ^
+noremap L $
+:ca w; w
+
+" emacs style key binding for insert mode
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+inoremap <C-b> <C-o>b
+inoremap <C-w> <C-o>w
+inoremap <C-u> <Esc><Right>c0
+inoremap jj <Esc>
+inoremap <C-k> <C-p>
+inoremap <C-j> <C-n>
+
+vnoremap ff <Esc>
+
+nnoremap < [{
+nnoremap > ]}
+nnoremap 's :%s/
+nnoremap ; :
+nnoremap : #
+nnoremap " ma*
+nnoremap , zf%
+nnoremap t za
+" nnoremap <C-j> <C-f>
+" nnoremap <C-k> <C-b>
+nnoremap <F2> :vs ~/.vimrc<CR>
+nnoremap <F5> gD
+nnoremap <F7> :vs $GOROOT/<CR>
+nnoremap <F8> :vs ~/f8snippet/<CR>
+nnoremap <F9> :set cc=80<CR>
+nnoremap <S-f> <C-]>
+
+"自动保存代码折叠信息
+au BufWinLeave * silent mkview
+au BUfWinEnter * silent loadview
+
+"xnoremap p pgvy
+noremap vp viwpgvy
+noremap vy yiw
+nnoremap K "_d
+" nnoremap ~ /=expand("<cword>")
+nnoremap ~ ma*
+
+" use left & right key to switch between buffers
+noremap <silent> <Left> :bp<CR>
+noremap <silent> <Right> :bn<CR>
+noremap <S-h> :bp<CR>
+noremap <S-l> :bn<CR>
+
+" map up & down to gk & gj for convenient in wrap model
+noremap <Up> gk
+noremap <Down> gj
+" write with sudo
+cmap w!! w !sudo tee %
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+" reselect visual block after indent/outdent
+vnoremap , <gv
+vnoremap . >gv
+
+" make Y behave like other capitals
+noremap Y y$
+
+" Quickly insert parenthesis/brackets/etc.
+" inoremap (( <Esc>I(<Esc>A)<Esc>I
+
+"" map ctrl + s to save file. need add 'stty -ixon' in the .bashrc or .zshrc
+"" if you use vim in the terminal.
+" inoremap <C-s> <Esc>:w<CR>a
+" nnoremap <C-s> :w<CR>
+nnoremap <Tab> %
+"nnoremap \ :!open <C-R>%<CR><CR>
+nnoremap U <C-r>
+
+" Window Navigation
+" noremap <C-J> <C-W>j
+" noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+noremap <C-W>l <C-l>
+" }}}
+
+" Omnifunc {{{ ---------------------------------------------------------------
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType c set omnifunc=ccomplete#Complete
+" }}}
+
+" MacVim {{{ -----------------------------------------------------------------
+if has("gui_running")
+    set go=aAce  " remove toolbar
+    "set transparency=30
+    set guifont=Monaco:h13
+    set showtabline=2
+    set columns=140
+    set lines=40
+    noremap <D-M-Left> :tabprevious<cr>
+    noremap <D-M-Right> :tabnext<cr>
+    map <D-1> 1gt
+    map <D-2> 2gt
+    map <D-3> 3gt
+    map <D-4> 4gt
+    map <D-5> 5gt
+    map <D-6> 6gt
+    map <D-7> 7gt
+    map <D-8> 8gt
+    map <D-9> 9gt
+    map <D-0> :tablast<CR>
+endif
+" }}}
+
+autocmd BufReadPre * if getfsize(expand("%")) > 10000000 | syntax off | endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call vundle#end()
+filetype plugin indent on
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
+"               keymap for intellij idea
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+noremap <C-p> :action RecentFiles<CR>
+
+noremap <S-m> :action ActivateProjectToolWindow<CR>
+noremap <S-h> :action PreviousTab<CR>
+noremap <S-l> :action NextTab<CR>
+
