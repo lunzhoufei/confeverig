@@ -557,3 +557,8 @@ noremap <S-m> :action ActivateProjectToolWindow<CR>
 noremap <S-h> :action PreviousTab<CR>
 noremap <S-l> :action NextTab<CR>
 
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+noremap <C-W>l <C-l>
+noremap <BS> :action CommentByLineComment<CR>
+
