@@ -7,10 +7,16 @@ green "Start handling zsh"
 
 
 # check if installed zsh 
-which zsh &> /dev/null
-if [[ $? != 0 ]];then
+
+if ! command -v zsh >> /dev/null; then
+    echo "zsh not found"
     setup zsh
 fi
+
+# which zsh &> /dev/null
+# if [[ $? != 0 ]];then
+#     setup zsh
+# fi
 
 if [[ -f ~/.zshrc || -h ~/.zshrc ]]; then
     mv ~/.zshrc ~/.zshrc.old
