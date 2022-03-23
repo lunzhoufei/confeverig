@@ -19,9 +19,9 @@ golang_config_snippet=$( cat << EOF
 #################### golang related  #####################
 export GO111MODULE=on
 export GOROOT=$go_install_location
-export GOPATH=$HOME/gopath
-export GOBIN=$HOME/gopath/bin
-export PATH=$PATH:$GOPATH/bin:$GOBIN:$GOROOT/bin
+export GOPATH=\$HOME/gopath
+export GOBIN=\$HOME/gopath/bin
+export PATH=\$PATH:\$GOPATH/bin:\$GOBIN:\$GOROOT/bin
 export GOSUMDB="off"
 export GOPROXY=https://goproxy.io,direct
 # export GOPROXY=https://goproxy.cn
