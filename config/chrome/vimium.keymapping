@@ -14,3 +14,35 @@ map f goForward
 
 map c duplicateTab
 map q togglePinTab
+
+// ============================================================================
+//                                 Search engine
+// ============================================================================
+
+
+w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia
+
+# More examples.
+#
+# (Vimium supports search completion Wikipedia, as
+# above, and for these.)
+#
+
+d: https://duckduckgo.com/?q=%s DuckDuckGo
+g: https://www.google.com/search?q=%s Google
+b: https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=%s Baidu
+
+l: https://search.bilibili.com/all?keyword=%s Bilibili
+y: https://www.youtube.com/results?search_query=%s Youtube
+
+
+# l: https://www.google.com/search?q=%s&btnI I'm feeling lucky...
+
+gm: https://www.google.com/maps?q=%s Google maps
+
+tm: https://list.tmall.com/search_product.htm?q=%s Tmall
+jd: https://search.jd.com/Search?keyword=xbox&enc=utf-8&wq=%s Bilibili
+
+
+# az: https://www.amazon.com/s/?field-keywords=%s Amazon
+# qw: https://www.qwant.com/?q=%s Qwant
