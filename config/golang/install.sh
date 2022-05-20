@@ -12,7 +12,7 @@ CONFEVERIG_DIR_TMP="$HOME/.confeverig/tmp"
 
 
 # Local variables
-go_version="1.17.8"
+go_version="1.18.1"
 go_install_location="/usr/local/go"
 
 golang_config_snippet=$( cat << EOF
