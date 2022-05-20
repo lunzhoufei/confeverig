@@ -1,0 +1,16 @@
+# Insert your preferred key mappings here.
+map H previousTab
+map s previousTab
+map L nextTab
+map d nextTab
+
+map J scrollPageDown
+map K scrollPageUp
+
+map z restoreTab
+
+map a goBack
+map f goForward
+
+map c duplicateTab
+map q togglePinTab
